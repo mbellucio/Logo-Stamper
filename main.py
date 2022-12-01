@@ -11,7 +11,7 @@ LOGO_COORD = None
 LOGO_SIZE = None
 FILE_SAVE = False
 SAVE_DIR = None
-
+IMG_SIZE = None
 
 # =============== Funcs =============#
 def update_img(img):
@@ -21,10 +21,12 @@ def update_img(img):
 
 
 def load_img():
-    global IMG_PATH
+    global IMG_PATH, IMG_SIZE
     img_open = tk.filedialog.askopenfile(mode='r')
     path = img_open.name
     IMG_PATH = path
+    img = Image.open(IMG_PATH)
+    IMG_SIZE = img.size
     image = ImageTk.PhotoImage(Image.open(IMG_PATH))
     update_img(image)
     
@@ -44,7 +46,7 @@ def load_logo():
 
 
 def reload():
-    global LOGO_SIZE, FILE_SAVE, SAVE_DIR
+    global LOGO_SIZE, FILE_SAVE, SAVE_DIR, IMG_SIZE
     img = Image.open(IMG_PATH)
     logo = Image.open(LOGO_PATH)
     logo = logo.resize(size=(LOGO_SIZE[0], LOGO_SIZE[1]))
@@ -55,6 +57,13 @@ def reload():
         FILE_SAVE = False
         SAVE_DIR = None
     else:
+        while IMG_SIZE[0] > 1500 or IMG_SIZE[1] > 800:
+            img_w = int(IMG_SIZE[0] - (IMG_SIZE[0] / 10))
+            img_h = int(IMG_SIZE[1] - (IMG_SIZE[1] / 10))
+            IMG_SIZE = (img_w, img_h)
+            img = img.resize(size=IMG_SIZE)
+        else:
+            img = img.resize(size=IMG_SIZE) 
         image = ImageTk.PhotoImage(image=img)
         return update_img(image)
 
