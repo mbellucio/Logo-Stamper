@@ -12,6 +12,7 @@ LOGO_SIZE = None
 FILE_SAVE = False
 SAVE_DIR = None
 
+
 # =============== Funcs =============#
 def update_img(img):
     label = tk.Label(image=img)
@@ -60,7 +61,7 @@ def reload():
 
 def move_left():
     global LOGO_COORD
-    xcor = LOGO_COORD[0] - 20
+    xcor = LOGO_COORD[0] - 10
 
     LOGO_COORD = (xcor, LOGO_COORD[1])
     reload()
@@ -68,7 +69,7 @@ def move_left():
 
 def move_right():
     global LOGO_COORD
-    xcor = LOGO_COORD[0] + 20
+    xcor = LOGO_COORD[0] + 10
 
     LOGO_COORD = (xcor, LOGO_COORD[1])
     reload()
@@ -76,7 +77,7 @@ def move_right():
 
 def move_up():
     global LOGO_COORD
-    ycor = LOGO_COORD[1] - 20
+    ycor = LOGO_COORD[1] - 10
 
     LOGO_COORD = (LOGO_COORD[0], ycor)
     reload()
@@ -84,7 +85,7 @@ def move_up():
 
 def move_down():
     global LOGO_COORD
-    ycor = LOGO_COORD[1] + 20
+    ycor = LOGO_COORD[1] + 10
 
     LOGO_COORD = (LOGO_COORD[0], ycor)
     reload()
@@ -121,10 +122,26 @@ def save_as():
     return reload()
 
 
+def set_logo_pos(event):
+    global LOGO_COORD, LOGO_SIZE
+    img = Image.open(IMG_PATH)
+    pos = logo_pos.get(logo_pos.curselection())
+    match pos:
+        case 'bottom right':
+            LOGO_COORD = ((img.size[0] - LOGO_SIZE[0]), (img.size[1] - LOGO_SIZE[1]))
+        case 'bottom left':
+            LOGO_COORD = (0, (img.size[1] - LOGO_SIZE[1]))
+        case 'top left':
+            LOGO_COORD = (0, 0)
+        case 'top right':
+            LOGO_COORD = ((img.size[0] - LOGO_SIZE[0]), 0) 
+    reload()
+
+
 # =============== UI =============#
 #window
 window = tk.Tk()
-window.title('Watermark Editor')
+window.title('Logo Stamp')
 window.config(padx=50, pady=40, bg=BACKGROUND_COLOR)
 
 #canvas
@@ -160,6 +177,13 @@ descale.grid(row=1, column=105)
 
 save = tk.Button(highlightthickness=0, bg='white', text='Save as', command=save_as)
 save.grid(row=1, column=110)
+
+logo_pos = tk.Listbox(height=4)
+positions = ['bottom right', 'bottom left', 'top right', 'top left']
+for item in positions:
+    logo_pos.insert(positions.index(item), item)
+logo_pos.bind('<<ListboxSelect>>', set_logo_pos)
+logo_pos.grid(row=1, column=100, sticky=tk.S)
 
 # ----------------
 window.mainloop()
