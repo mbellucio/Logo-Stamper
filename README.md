@@ -1,7 +1,7 @@
 # Logo Stamper
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-<img src="https://i.ibb.co/vHTkktv/logostamper.png">
+<img src="https://i.imgur.com/YFyDuIk.png">
 
 ## About this project 📌
 This Project idea is to create a GUI that<br>
